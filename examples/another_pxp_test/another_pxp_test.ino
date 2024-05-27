@@ -167,6 +167,7 @@ void run_pxp(uint8_t rotation, bool flip, float scaling){
                 d_fb, PXP_RGB565, 2, 0,         /* Output buffer configuration */ 
                 rotation, flip, scaling,        /* Rotation, flip, scaling */
                 &outputWidth, &outputHeight);   /* Frame Out size for drawing */
+  PXP_finish();
   Serial.printf("PXP time(micros) : %d, ", micros()-pxp_time);
 
   display_time = millis();

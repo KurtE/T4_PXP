@@ -59,6 +59,9 @@ typedef struct
 
 volatile IMXRT_NEXT_PXP_t next_pxp __attribute__ ((aligned(32))) = {0};
 volatile bool PXP_done = true;
+
+void (*PXP_doneCB)() = nullptr;
+
 //These are only used to flush cached buffers
 uint16_t PS_BUF_width, PS_BUF_height, PS_BUF_bytesPerPixel,
          PS_UBUF_width, PS_UBUF_height, PS_UBUF_bytesPerPixel,
@@ -85,6 +88,7 @@ void PXP_isr(){
   if((PXP_STAT & PXP_STAT_IRQ) != 0){
     PXP_STAT_CLR = PXP_STAT_IRQ;
     PXP_done = true;
+    if (PXP_doneCB) (*PXP_doneCB)();
   }
 #if defined(__IMXRT1062__) // Teensy 4.x
   asm("DSB");
@@ -598,4 +602,9 @@ void PXP_flip(bool flip) {
    * PXP_flip_both                                        *
    */
   PXP_flip_both(flip);
+}
+
+void PXP_setPXPDoneCB(void (*cb)()) {
+  PXP_doneCB = cb;
+
 }

@@ -110,3 +110,7 @@ void PXP_process();
 
 //Call to make sure the last process is finished before using the buffer with a display
 void PXP_finish();
+
+//set up a call back function that is called from the PXP ISR when process completes
+#define PXP_CALLBACK_SUPPORTED
+void PXP_setPXPDoneCB(void (*cb)());
