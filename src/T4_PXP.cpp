@@ -21,46 +21,15 @@
  */
 
 #include "T4_PXP.h"
-typedef struct
-{
-    volatile uint32_t CTRL;
-    volatile uint32_t STAT;
-    volatile uint32_t OUT_CTRL;
-    volatile void*    OUT_BUF;
-    volatile void*    OUT_BUF2;
-    volatile uint32_t OUT_PITCH;
-    volatile uint32_t OUT_LRC;
-    volatile uint32_t OUT_PS_ULC;
-    volatile uint32_t OUT_PS_LRC;
-    volatile uint32_t OUT_AS_ULC;
-    volatile uint32_t OUT_AS_LRC;
-    volatile uint32_t PS_CTRL;
-    volatile void*    PS_BUF;
-    volatile void*    PS_UBUF;
-    volatile void*    PS_VBUF;
-    volatile uint32_t PS_PITCH;
-    volatile uint32_t PS_BACKGROUND;
-    volatile uint32_t PS_SCALE;
-    volatile uint32_t PS_OFFSET;
-    volatile uint32_t PS_CLRKEYLOW;
-    volatile uint32_t PS_CLRKEYHIGH;
-    volatile uint32_t AS_CTRL;
-    volatile void*    AS_BUF;
-    volatile uint32_t AS_PITCH;
-    volatile uint32_t AS_CLRKEYLOW;
-    volatile uint32_t AS_CLRKEYHIGH;
-    volatile uint32_t CSC1_COEF0;
-    volatile uint32_t CSC1_COEF1;
-    volatile uint32_t CSC1_COEF2;
-    volatile uint32_t POWER;
-    volatile uint32_t NEXT;
-    volatile uint32_t PORTER_DUFF_CTRL;
-} IMXRT_NEXT_PXP_t;
-
 volatile IMXRT_NEXT_PXP_t next_pxp __attribute__ ((aligned(32))) = {0};
 volatile bool PXP_done = true;
 
 void (*PXP_doneCB)() = nullptr;
+
+volatile IMXRT_NEXT_PXP_t *PXP_next_pxp() {
+  return &next_pxp;
+}
+
 
 //These are only used to flush cached buffers
 uint16_t PS_BUF_width, PS_BUF_height, PS_BUF_bytesPerPixel,
@@ -227,6 +196,7 @@ void PXP_input_position(uint16_t x, uint16_t y, uint16_t x1, uint16_t y1){
     * x, y: Upper left corner
     * x1, y1: Lower right corners
     */
+  Serial.printf("PXP_input_position(%u, %u, %u, %u)\n", x, y, x1, y1);
   next_pxp.OUT_PS_ULC = PXP_XCOORD(x) | PXP_YCOORD(y);
   next_pxp.OUT_PS_LRC = PXP_XCOORD(x1) | PXP_YCOORD(y1);
 }

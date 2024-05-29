@@ -26,6 +26,45 @@
     #error Device has no Pixel Pipeline support
 #endif
 
+// Should be added to imxrt.h
+typedef struct
+{
+    volatile uint32_t CTRL;
+    volatile uint32_t STAT;
+    volatile uint32_t OUT_CTRL;
+    volatile void*    OUT_BUF;
+    volatile void*    OUT_BUF2;
+    volatile uint32_t OUT_PITCH;
+    volatile uint32_t OUT_LRC;
+    volatile uint32_t OUT_PS_ULC;
+    volatile uint32_t OUT_PS_LRC;
+    volatile uint32_t OUT_AS_ULC;
+    volatile uint32_t OUT_AS_LRC;
+    volatile uint32_t PS_CTRL;
+    volatile void*    PS_BUF;
+    volatile void*    PS_UBUF;
+    volatile void*    PS_VBUF;
+    volatile uint32_t PS_PITCH;
+    volatile uint32_t PS_BACKGROUND;
+    volatile uint32_t PS_SCALE;
+    volatile uint32_t PS_OFFSET;
+    volatile uint32_t PS_CLRKEYLOW;
+    volatile uint32_t PS_CLRKEYHIGH;
+    volatile uint32_t AS_CTRL;
+    volatile void*    AS_BUF;
+    volatile uint32_t AS_PITCH;
+    volatile uint32_t AS_CLRKEYLOW;
+    volatile uint32_t AS_CLRKEYHIGH;
+    volatile uint32_t CSC1_COEF0;
+    volatile uint32_t CSC1_COEF1;
+    volatile uint32_t CSC1_COEF2;
+    volatile uint32_t POWER;
+    volatile uint32_t NEXT;
+    volatile uint32_t PORTER_DUFF_CTRL;
+} IMXRT_NEXT_PXP_t;
+
+
+
 //Start PXP
 void PXP_init();
 
@@ -114,3 +153,6 @@ void PXP_finish();
 //set up a call back function that is called from the PXP ISR when process completes
 #define PXP_CALLBACK_SUPPORTED
 void PXP_setPXPDoneCB(void (*cb)());
+
+// function to return pointer the next data
+volatile IMXRT_NEXT_PXP_t *PXP_next_pxp();
